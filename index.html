@@ -1046,12 +1046,28 @@
   // COMPLIMENT
   // ══════════════════════════════════════════════
   let lastIdx = -1;
+  let complimentDeck = [];
 
   function showCompliment(e) {
     spawnSparkles(e);
 
-    let idx;
-    do { idx = Math.floor(Math.random() * MESSAGES.length); } while (idx === lastIdx && MESSAGES.length > 1);
+    // Если колода пуста, наполняем её индексами комплиментов и перемешиваем
+    if (complimentDeck.length === 0) {
+      complimentDeck = Array.from({ length: MESSAGES.length }, (_, i) => i);
+      // Тасование Фишера-Йетса
+      for (let i = complimentDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [complimentDeck[i], complimentDeck[j]] = [complimentDeck[j], complimentDeck[i]];
+      }
+      
+      // Исключаем совпадение первого элемента новой колоды с последним показанным комплиментом
+      if (lastIdx !== -1 && complimentDeck[complimentDeck.length - 1] === lastIdx && complimentDeck.length > 1) {
+        [complimentDeck[complimentDeck.length - 1], complimentDeck[0]] = [complimentDeck[0], complimentDeck[complimentDeck.length - 1]];
+      }
+    }
+
+    // Достаем случайный уникальный комплимент из колоды
+    const idx = complimentDeck.pop();
     lastIdx = idx;
     const msg = MESSAGES[idx];
 
@@ -1144,18 +1160,30 @@
   ];
 
   let lastJarIdx = -1;
+  let jarDeck = [];
 
   function drawJarNote(e) {
     // Sparkles burst on click coordinate
     spawnSparkles(e);
 
-    // Pick random note, different from the last one
-    let idx;
-    do {
-      idx = Math.floor(Math.random() * JAR_NOTES.length);
-    } while (idx === lastJarIdx && JAR_NOTES.length > 1);
-    lastJarIdx = idx;
+    // Если колода пуста, наполняем её индексами записок и перемешиваем
+    if (jarDeck.length === 0) {
+      jarDeck = Array.from({ length: JAR_NOTES.length }, (_, i) => i);
+      // Тасование Фишера-Йетса
+      for (let i = jarDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [jarDeck[i], jarDeck[j]] = [jarDeck[j], jarDeck[i]];
+      }
+      
+      // Предотвращаем совпадение первой записки новой колоды с последней показанной
+      if (lastJarIdx !== -1 && jarDeck[jarDeck.length - 1] === lastJarIdx && jarDeck.length > 1) {
+        [jarDeck[jarDeck.length - 1], jarDeck[0]] = [jarDeck[0], jarDeck[jarDeck.length - 1]];
+      }
+    }
 
+    // Достаем уникальную записку из колоды
+    const idx = jarDeck.pop();
+    lastJarIdx = idx;
     const note = JAR_NOTES[idx];
 
     // Set popup contents
