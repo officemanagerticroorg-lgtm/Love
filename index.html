@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Для тебя 🌸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:        #f2a7bb;
+      --rose-light:  #fce4ec;
+      --rose-deep:   #d4789a;
+      --cream:       #fdf6f0;
+      --graphite:    #2c2038;
+      --graphite-mid:#5a4a6a;
+      --glass-bg:    rgba(255,255,255,0.45);
+      --glass-border:rgba(255,255,255,0.75);
+      --shadow:      0 8px 40px rgba(180,100,140,0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--graphite);
+      overflow-x: hidden;
+      min-height: 100dvh;
+    }
+
+    /* ── CANVAS BACKGROUND ── */
+    #canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NOISE GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 2;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding-top: clamp(60px, 15dvh, 100px);
+      animation: fadeUp 1s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+      margin-bottom: 18px;
+      opacity: 0.85;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(44px, 12vw, 72px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--graphite);
+      margin-bottom: 20px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--rose-deep);
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 4.5vw, 22px);
+      font-weight: 300;
+      color: var(--graphite-mid);
+      line-height: 1.6;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    /* ── GLASS CARD ── */
+    .glass-card {
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 24px;
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      box-shadow: var(--shadow);
+      padding: 32px 28px;
+      animation: fadeUp 1s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    /* ── COMPLIMENT SECTION ── */
+    .compliment-card { animation-delay: 0.15s; }
+
+    .card-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+      margin-bottom: 20px;
+    }
+
+    .compliment-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(20px, 5.5vw, 26px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--graphite);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .compliment-text.fade-out {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .btn-miss {
+      margin-top: 24px;
+      width: 100%;
+      padding: 15px 24px;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      box-shadow: 0 4px 20px rgba(212,120,154,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-miss::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 60%);
+      border-radius: inherit;
+    }
+
+    .btn-miss:active {
+      transform: scale(0.97);
+      filter: brightness(1.05);
+    }
+
+    .btn-miss:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(212,120,154,0.45);
+    }
+
+    /* ── COUNTER SECTION ── */
+    .counter-card { animation-delay: 0.3s; }
+
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .counter-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 16px;
+      padding: 18px 8px 14px;
+    }
+
+    .counter-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(34px, 9vw, 48px);
+      font-weight: 300;
+      color: var(--graphite);
+      line-height: 1;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .counter-number.bump {
+      transform: scale(1.15);
+    }
+
+    .counter-label {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+    }
+
+    .counter-since {
+      margin-top: 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--graphite-mid);
+      text-align: center;
+    }
+
+    /* ── PHOTO / QUOTE ── */
+    .quote-card {
+      animation-delay: 0.45s;
+      text-align: center;
+    }
+
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(18px, 5vw, 24px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--graphite);
+    }
+
+    .quote-author {
+      margin-top: 14px;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+      opacity: 0.75;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--graphite-mid);
+      text-align: center;
+      opacity: 0.7;
+      animation: fadeUp 1s cubic-bezier(.16,1,.3,1) 0.6s both;
+    }
+
+    /* ── COMPLIMENT POPUP ── */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 24px;
+      pointer-events: none;
+    }
+
+    .popup {
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border-radius: 22px;
+      padding: 28px 26px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 16px 60px rgba(180,100,140,0.28);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: transform 0.48s cubic-bezier(.16,1,.3,1), opacity 0.35s ease;
+      pointer-events: auto;
+    }
+
+    .popup.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .popup-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .popup-msg {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(19px, 5vw, 24px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--graphite);
+    }
+
+    .popup-close {
+      margin-top: 18px;
+      background: none;
+      border: 1.5px solid var(--rose);
+      color: var(--rose-deep);
+      border-radius: 10px;
+      padding: 9px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .popup-close:hover {
+      background: var(--rose-light);
+    }
+
+    /* ── FLOATING HEARTS (canvas fallback decoration) ── */
+    .deco-hearts {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(-100dvh) scale(0.4) rotate(25deg); opacity: 0; }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 48px;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--rose), transparent);
+      margin: 0 auto 20px;
+    }
+
+    /* ── PULSE DOT ── */
+    .live-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--rose-deep);
+      border-radius: 50%;
+      margin-right: 7px;
+      animation: pulse 2s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212,120,154,0.5); }
+      50%       { box-shadow: 0 0 0 5px rgba(212,120,154,0); }
+    }
+
+    /* ── ENVELOPE CARD & 3D CSS ── */
+    .envelope-card {
+      animation-delay: 0.22s;
+      text-align: center;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 220px;
+      height: 140px;
+      margin: 15px auto 5px;
+      cursor: pointer;
+      perspective: 800px;
+    }
+
+    .envelope {
+      position: absolute;
+      inset: 0;
+      background: #fdf5f7;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(180,100,140,0.12);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-style: preserve-3d;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 110px solid transparent;
+      border-right: 110px solid transparent;
+      border-top: 75px solid var(--rose);
+      transform-origin: top;
+      transition: transform 0.4s ease 0.18s;
+      z-index: 3;
+    }
+
+    .envelope-front {
+      position: absolute;
+      inset: 0;
+      background: none;
+      z-index: 2;
+    }
+
+    .envelope-front::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 110px solid #fae1e6;
+      border-right: 110px solid #fae1e6;
+      border-top: 70px solid transparent;
+      border-bottom: 70px solid #fae1e6;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .envelope-paper {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 8px;
+      background: #fff;
+      border-radius: 4px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      z-index: 1;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .envelope-paper p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--graphite-mid);
+    }
+
+    .wax-seal {
+      position: absolute;
+      top: 48px;
+      left: 88px;
+      width: 44px;
+      height: 44px;
+      z-index: 4;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    }
+
+    .seal-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Hover & Active animations */
+    .envelope-wrapper:hover .envelope {
+      transform: translateY(-4px);
+    }
+    
+    .envelope-wrapper:hover .wax-seal {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .envelope-hint {
+      margin-top: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--graphite-mid);
+      opacity: 0.85;
+    }
+
+    .envelope-wrapper.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 0;
+      transition: transform 0.4s ease;
+    }
+
+    .envelope-wrapper.open .envelope-paper {
+      transform: translateY(-35px);
+      transition: transform 0.4s ease 0.25s;
+    }
+
+    .envelope-wrapper.open .wax-seal {
+      transform: translateY(20px) scale(0.8);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.4s ease, opacity 0.25s ease;
+    }
+
+    /* Fullscreen Letter Overlay */
+    .letter-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 32, 56, 0.4);
+      backdrop-filter: blur(15px) saturate(140%);
+      -webkit-backdrop-filter: blur(15px) saturate(140%);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .letter-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .letter-paper {
+      background: #fdfaf6;
+      border: 1px solid rgba(212, 120, 154, 0.15);
+      border-radius: 20px;
+      max-width: 420px;
+      width: 100%;
+      max-height: 82dvh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(44, 32, 56, 0.25);
+      position: relative;
+      padding: 36px 26px;
+      transform: scale(0.9) translateY(30px);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      background-image: linear-gradient(rgba(212, 120, 154, 0.05) 1px, transparent 1px);
+      background-size: 100% 28px;
+    }
+
+    .letter-overlay.show .letter-paper {
+      transform: scale(1) translateY(0);
+    }
+
+    .letter-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 14px;
+      color: var(--rose-deep);
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .letter-close:hover {
+      opacity: 1;
+    }
+
+    .letter-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--graphite);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .letter-date {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+      text-align: center;
+      margin-bottom: 24px;
+      opacity: 0.8;
+    }
+
+    .letter-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      line-height: 28px;
+      color: var(--graphite);
+      font-style: italic;
+      text-align: left;
+    }
+
+    .letter-text p {
+      margin-bottom: 18px;
+      text-indent: 15px;
+    }
+
+    .letter-signature {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 19px;
+      color: var(--rose-deep);
+      text-align: right;
+      margin-top: 24px;
+      margin-right: 10px;
+    }
+
+    /* ── LOVE JAR ── */
+    .jar-card {
+      animation-delay: 0.36s;
+      text-align: center;
+    }
+
+    .jar-wrapper {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+      margin: 15px auto 5px;
+    }
+
+    .glowing-jar {
+      width: 100px;
+      height: 140px;
+      position: relative;
+      margin: 0 auto;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .jar-wrapper:hover .glowing-jar {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .jar-wrapper:active .glowing-jar {
+      transform: scale(0.95);
+    }
+
+    .jar-lid {
+      width: 50px;
+      height: 12px;
+      background: linear-gradient(90deg, #d4789a, #fae1e6, #d4789a);
+      border-radius: 5px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .jar-neck {
+      width: 42px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-top: none;
+      border-bottom: none;
+      margin: 0 auto;
+      z-index: 2;
+    }
+
+    .jar-body {
+      width: 86px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.35);
+      border: 1.8px solid rgba(255, 255, 255, 0.85);
+      border-radius: 18px 18px 24px 24px;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 
+        inset 0 8px 16px rgba(255,255,255,0.6),
+        inset 0 -8px 20px rgba(180,100,140,0.12),
+        0 6px 26px rgba(180,100,140,0.2);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .jar-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: var(--rose-deep);
+      border: 1px solid rgba(212, 120, 154, 0.35);
+      border-radius: 4px;
+      padding: 2px 6px;
+      background: rgba(255,255,255,0.65);
+      transform: translateY(-8px);
+      user-select: none;
+      box-shadow: 0 2px 5px rgba(180,100,140,0.08);
+      z-index: 2;
+    }
+
+    .jar-particles {
+      position: absolute;
+      inset: 0;
+    }
+
+    .jar-particles span {
+      position: absolute;
+      font-size: 11px;
+      pointer-events: none;
+    }
+
+    .jar-particles .p1 { left: 15%; top: 55%; animation: jarFloat 3s ease-in-out infinite alternate; }
+    .jar-particles .p2 { left: 68%; top: 35%; animation: jarFloat 2.6s ease-in-out infinite alternate-reverse 0.4s; }
+    .jar-particles .p3 { left: 42%; top: 70%; animation: jarFloat 3.4s ease-in-out infinite alternate 0.8s; font-size: 13px; }
+    .jar-particles .p4 { left: 28%; top: 25%; animation: jarFloat 2.8s ease-in-out infinite alternate 1.2s; }
+    .jar-particles .p5 { left: 55%; top: 62%; animation: jarFloat 3.2s ease-in-out infinite alternate-reverse 0.2s; }
+    .jar-particles .p6 { left: 72%; top: 60%; animation: jarFloat 3s ease-in-out infinite alternate 0.6s; font-size: 12px; }
+
+    @keyframes jarFloat {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.45; filter: blur(0.3px); }
+      100% { transform: translate(5px, -10px) scale(1.1); opacity: 0.95; filter: drop-shadow(0 0 3px rgba(212,120,154,0.4)); }
+    }
+
+    .jar-hint {
+      margin-top: 10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--graphite-mid);
+      opacity: 0.85;
+    }
+
+    /* Jar note popup details */
+    .jar-note-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 32, 56, 0.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 190;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .jar-note-popup.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .jar-note-card {
+      background: #fffdfb;
+      border: 1.5px solid rgba(212, 120, 154, 0.25);
+      border-radius: 20px;
+      padding: 32px 24px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 16px 50px rgba(180, 100, 140, 0.25);
+      text-align: center;
+      transform: translateY(30px) scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .jar-note-popup.show .jar-note-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .jar-note-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+      animation: noteEmojiPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .jar-note-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(20px, 5.2vw, 24px);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--graphite);
+      margin-bottom: 22px;
+      min-height: 60px;
+    }
+
+    .jar-note-close {
+      background: none;
+      border: 1.5px solid var(--rose);
+      color: var(--rose-deep);
+      border-radius: 12px;
+      padding: 8px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .jar-note-close:hover {
+      background: var(--rose-light);
+    }
+
+    /* ── SPARKLE burst on button click ── */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 200;
+      font-size: 18px;
+      animation: sparklePop 0.7s cubic-bezier(.16,1,.3,1) forwards;
+    }
+
+    @keyframes sparklePop {
+      0%   { transform: translate(-50%,-50%) scale(0) rotate(0deg); opacity: 1; }
+      80%  { transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(var(--tr)); opacity: 1; }
+      100% { transform: translate(var(--tx2), var(--ty2)) scale(0.6) rotate(var(--tr2)); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<div class="deco-hearts" id="deco-hearts"></div>
+
+
+
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup" id="popup">
+    <span class="popup-emoji" id="popup-emoji">🌸</span>
+    <div class="popup-msg" id="popup-msg">Загрузка...</div>
+    <button class="popup-close" onclick="closePopup()">закрыть ✕</button>
+  </div>
+</div>
+
+<!-- FULLSCREEN LETTER OVERLAY -->
+<div class="letter-overlay" id="letter-overlay">
+  <div class="letter-paper">
+    <button class="letter-close" onclick="closeLetter()">закрыть ✕</button>
+    <div class="letter-content">
+      <h2>Моё сердце для тебя... 🌸</h2>
+      <p class="letter-date" id="letter-date-display"></p>
+      <div class="letter-text">
+        <p>Привет, моя самая любимая девочка! 🤍</p>
+        <p>Я пишу эти строки, потому что безумно счастлив быть рядом с тобой. Каждый день с тобой наполнен теплом, радостью и какими-то совершенно особенными, волшебными моментами, которые я храню в самом сердце.</p>
+        <p>Спасибо тебе за твою нежность, твой заразительный смех и за то, как ты умеешь согревать меня одним своим взглядом. Ты — моё вдохновение, моё спокойствие и мой уютный дом, где бы мы ни находились.</p>
+        <p>Помни, что ты способна на абсолютно всё, а я всегда буду рядом, чтобы поддержать тебя, крепко обнять и напомнить о том, какая ты невероятная и потрясающая.</p>
+        <p>Люблю тебя бесконечно, солнце моё! 🧸✨</p>
+      </div>
+      <p class="letter-signature">— всегда твой</p>
+    </div>
+  </div>
+</div>
+
+<!-- LOVE JAR NOTE POPUP -->
+<div class="jar-note-popup" id="jar-note-popup">
+  <div class="jar-note-card">
+    <span class="jar-note-emoji" id="jar-note-emoji">🌸</span>
+    <p class="jar-note-text" id="jar-note-text">Здесь будет твоя записка...</p>
+    <button class="jar-note-close" onclick="closeJarNote()">закрыть ✕</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <p class="hero-eyebrow">Специально для тебя</p>
+    <h1 class="hero-title">Привет,<br><em>моя любовь</em></h1>
+    <p class="hero-sub">Я сделал это, чтобы ты улыбнулась в любой момент дня 🌸</p>
+  </div>
+
+  <div class="glass-card compliment-card">
+    <p class="card-label">✦ Комплимент дня</p>
+    <div class="divider"></div>
+    <p class="compliment-text" id="compliment-inline">
+      Нажми на кнопку ниже — и я скажу тебе кое-что важное...
+    </p>
+    <button class="btn-miss" id="btn-miss" onclick="showCompliment(event)">
+      Нажми, если скучаешь по мне 🤍
+    </button>
+  </div>
+
+  <!-- ENVELOPE CARD -->
+  <div class="glass-card envelope-card" id="envelope-section">
+    <p class="card-label">✦ Особое послание</p>
+    <div class="divider"></div>
+    <div class="envelope-wrapper" onclick="openLetter()">
+      <div class="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-paper">
+          <p>Моей самой любимой...</p>
+        </div>
+        <div class="envelope-front"></div>
+        <div class="wax-seal">
+          <svg viewBox="0 0 100 100" class="seal-svg">
+            <path d="M50 8 C68 6, 88 18, 92 40 C95 62, 78 86, 52 92 C28 97, 6 78, 8 50 C9 22, 32 10, 50 8 Z" fill="#b94a73" filter="drop-shadow(0px 3px 5px rgba(0,0,0,0.2))" />
+            <circle cx="50" cy="50" r="28" fill="#a0375f" />
+            <path d="M50 63 C50 63 32 49 32 38 C32 30 38 24 45 24 C48.5 24 50 27 50 27 C50 27 51.5 24 55 24 C62 24 68 30 68 38 C68 49 50 63 50 63 Z" fill="#ffffff" opacity="0.9" />
+          </svg>
+        </div>
+      </div>
+      <p class="envelope-hint">Нажми на сургучную печать, чтобы открыть письмо ✨</p>
+    </div>
+  </div>
+
+  <div class="glass-card counter-card">
+    <p class="card-label"><span class="live-dot"></span>Мы вместе уже</p>
+    <div class="divider"></div>
+    <div class="counter-grid">
+      <div class="counter-unit">
+        <div class="counter-number" id="cnt-days">0</div>
+        <div class="counter-label">дней</div>
+      </div>
+      <div class="counter-unit">
+        <div class="counter-number" id="cnt-hours">0</div>
+        <div class="counter-label">часов</div>
+      </div>
+      <div class="counter-unit">
+        <div class="counter-number" id="cnt-mins">0</div>
+        <div class="counter-label">минут</div>
+      </div>
+    </div>
+    <p class="counter-since" id="counter-since">с самого первого дня ✦</p>
+  </div>
+
+  <!-- LOVE JAR CARD -->
+  <div class="glass-card jar-card">
+    <p class="card-label">✦ Баночка тёплых записок</p>
+    <div class="divider"></div>
+    <div class="jar-wrapper" onclick="drawJarNote(event)">
+      <div class="glowing-jar">
+        <div class="jar-lid"></div>
+        <div class="jar-neck"></div>
+        <div class="jar-body">
+          <div class="jar-label">LOVE</div>
+          <div class="jar-particles">
+            <span class="p1">🌸</span>
+            <span class="p2">✨</span>
+            <span class="p3">💖</span>
+            <span class="p4">🌸</span>
+            <span class="p5">✨</span>
+            <span class="p6">💗</span>
+          </div>
+        </div>
+      </div>
+      <p class="jar-hint">Нажми на баночку, чтобы достать записку 🧸🫙</p>
+    </div>
+  </div>
+
+  <div class="glass-card quote-card">
+    <p class="card-label">✦ Для тебя</p>
+    <div class="divider"></div>
+    <p class="quote-text">
+      «Ты — моё любимое место в этом мире. Не точка на карте, а ощущение дома»
+    </p>
+    <p class="quote-author">— всегда твой</p>
+  </div>
+
+  <p class="footer">сделано с любовью, только для тебя 🌸</p>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════
+  // ⚙️  НАСТРОЙКИ — ТОЧНАЯ ДАТА И ТВОИ ФРАЗЫ
+  // ══════════════════════════════════════════════
+
+  // 📅 Дата начала отношений: 30 сентября 2023 года, 17:00 (5 часов вечера)
+  // Обрати внимание: в JS месяцы идут от 0 до 11 (0 - янв, 8 - сент)
+  const START_DATE = new Date(2023, 8, 30, 17, 0); 
+
+  // 💬 Комплименты и твои персональные фразы со смайликами
+  const MESSAGES = [
+    { emoji: '☀️', text: 'Я люблю тебя, солнышко моё! 🥰✨' },
+    { emoji: '🧸', text: 'Моя малышка! ❤️🐣' },
+    { emoji: '💪', text: 'Ты справишься — я с тобой! 🫂💖✨' },
+    { emoji: '🌸', text: 'Ты самая красивая — даже когда делаешь вид, что сердишься. 😘' },
+    { emoji: '✨', text: 'Когда ты смеёшься, я забываю обо всём остальном. 💫' },
+    { emoji: '🌙', text: 'Я скучаю по тебе каждый раз, когда ты не рядом. 🥺💞' },
+    { emoji: '🍓', text: 'Твоя улыбка — мой любимый вид на Земле. Без преувеличений. 😍' },
+    { emoji: '💌', text: 'Если бы я мог выбрать снова — я бы выбрал тебя. Быстро и без раздумий. 💘' }
+  ];
+
+  // ══════════════════════════════════════════════
+  // COUNTER
+  // ══════════════════════════════════════════════
+  const dayEl   = document.getElementById('cnt-days');
+  const hourEl  = document.getElementById('cnt-hours');
+  const minEl   = document.getElementById('cnt-mins');
+  const sinceEl = document.getElementById('counter-since');
+
+  const monthNames = ['января','февраля','марта','апреля','мая','июня',
+                      'июля','августа','сентября','октября','ноября','декабря'];
+
+  function updateCounter() {
+    const now  = new Date();
+    const diff = now - START_DATE;
+    if (diff < 0) return;
+
+    const days  = Math.floor(diff / 864e5);
+    const hours = Math.floor((diff % 864e5) / 36e5);
+    const mins  = Math.floor((diff % 36e5)  / 6e4);
+
+    const prevDays = dayEl.textContent;
+
+    dayEl.textContent  = days;
+    hourEl.textContent = String(hours).padStart(2,'0');
+    minEl.textContent  = String(mins).padStart(2,'0');
+
+    if (prevDays !== String(days)) {
+      dayEl.classList.add('bump');
+      setTimeout(() => dayEl.classList.remove('bump'), 350);
+    }
+
+    sinceEl.textContent =
+      `с ${START_DATE.getDate()} ${monthNames[START_DATE.getMonth()]} ${START_DATE.getFullYear()} ✦`;
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 10000);
+
+  // ══════════════════════════════════════════════
+  // COMPLIMENT
+  // ══════════════════════════════════════════════
+  let lastIdx = -1;
+
+  function showCompliment(e) {
+    spawnSparkles(e);
+
+    let idx;
+    do { idx = Math.floor(Math.random() * MESSAGES.length); } while (idx === lastIdx && MESSAGES.length > 1);
+    lastIdx = idx;
+    const msg = MESSAGES[idx];
+
+    // update inline card
+    const el = document.getElementById('compliment-inline');
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      el.textContent = msg.text;
+      el.classList.remove('fade-out');
+    }, 360);
+
+    // show popup
+    document.getElementById('popup-emoji').textContent = msg.emoji;
+    document.getElementById('popup-msg').textContent   = msg.text;
+    const popup = document.getElementById('popup');
+    popup.classList.add('show');
+    document.getElementById('popup-overlay').style.pointerEvents = 'auto';
+
+    spawnFloatingHeart();
+  }
+
+  function closePopup() {
+    const popup = document.getElementById('popup');
+    popup.classList.remove('show');
+    document.getElementById('popup-overlay').style.pointerEvents = 'none';
+  }
+
+  document.getElementById('popup-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  // ══════════════════════════════════════════════
+  // LOVE LETTER LOGIC
+  // ══════════════════════════════════════════════
+  function openLetter() {
+    const envelopeWrapper = document.querySelector('.envelope-wrapper');
+    if (!envelopeWrapper) return;
+
+    // Trigger open animations
+    envelopeWrapper.classList.add('open');
+
+    // Format current date nicely in Russian
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const todayStr = new Date().toLocaleDateString('ru-RU', options);
+    const dateEl = document.getElementById('letter-date-display');
+    if (dateEl) dateEl.textContent = todayStr;
+
+    // Open full letter modal with a soft delay
+    setTimeout(() => {
+      const letterOverlay = document.getElementById('letter-overlay');
+      if (letterOverlay) letterOverlay.classList.add('show');
+    }, 600);
+  }
+
+  function closeLetter() {
+    const letterOverlay = document.getElementById('letter-overlay');
+    if (letterOverlay) letterOverlay.classList.remove('show');
+
+    // Gracefully seal back the envelope
+    setTimeout(() => {
+      const envelopeWrapper = document.querySelector('.envelope-wrapper');
+      if (envelopeWrapper) envelopeWrapper.classList.remove('open');
+    }, 400);
+  }
+
+  // Click on background overlay to close
+  document.getElementById('letter-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeLetter();
+  });
+
+  // ══════════════════════════════════════════════
+  // LOVE JAR LOGIC
+  // ══════════════════════════════════════════════
+  const JAR_NOTES = [
+    { emoji: '🧸', text: 'Причина №1: Рядом с тобой я чувствую себя по-настоящему дома.' },
+    { emoji: '✨', text: 'Причина №2: Твой смех — мой самый любимый звук во всей вселенной.' },
+    { emoji: '☕️', text: 'Задание: Давай сегодня выпьем кофе и поговорим обо всём на свете?' },
+    { emoji: '🌸', text: 'Причина №3: Ты умеешь находить красоту в самых простых вещах.' },
+    { emoji: '💫', text: 'Причина №4: Твои объятия способны вылечить любую мою усталость.' },
+    { emoji: '🍓', text: 'Причина №5: Твоя забота делает меня невероятно счастливым.' },
+    { emoji: '💌', text: 'Задание: Напиши мне одно слово, которое описывает твоё настроение прямо сейчас.' },
+    { emoji: '💗', text: 'Причина №6: Ты веришь в меня даже тогда, когда я сам в себе сомневаюсь.' },
+    { emoji: '🪐', text: 'Причина №7: Наш собственный уютный мир вдвоём — лучшее, что у меня есть.' },
+    { emoji: '🌷', text: 'Причина №8: Твой взгляд греет меня сильнее любого летнего солнца.' },
+    { emoji: '🐣', text: 'Причина №9: Ты безумно милая, когда сонная или только проснулась.' },
+    { emoji: '🎬', text: 'Задание: Устроим сегодня вечер нашего любимого кино и обнимемся?' },
+    { emoji: '💞', text: 'Причина №10: С каждым днём я влюбляюсь в тебя всё сильнее.' },
+    { emoji: '🎨', text: 'Причина №11: Ты раскрасила мою жизнь самыми яркими красками.' },
+    { emoji: '🍰', text: 'Задание: Давай выберем день и приготовим вместе какой-нибудь вкусный десерт?' }
+  ];
+
+  let lastJarIdx = -1;
+
+  function drawJarNote(e) {
+    // Sparkles burst on click coordinate
+    spawnSparkles(e);
+
+    // Pick random note, different from the last one
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * JAR_NOTES.length);
+    } while (idx === lastJarIdx && JAR_NOTES.length > 1);
+    lastJarIdx = idx;
+
+    const note = JAR_NOTES[idx];
+
+    // Set popup contents
+    const emojiEl = document.getElementById('jar-note-emoji');
+    const textEl = document.getElementById('jar-note-text');
+    if (emojiEl) emojiEl.textContent = note.emoji;
+    if (textEl) textEl.textContent = note.text;
+
+    // Show popup overlay
+    setTimeout(() => {
+      const jarPopup = document.getElementById('jar-note-popup');
+      if (jarPopup) jarPopup.classList.add('show');
+    }, 150);
+
+    // Spawn an extra floating heart for effect
+    spawnFloatingHeart();
+  }
+
+  function closeJarNote() {
+    const jarPopup = document.getElementById('jar-note-popup');
+    if (jarPopup) jarPopup.classList.remove('show');
+  }
+
+  // Click on background overlay to close
+  document.getElementById('jar-note-popup').addEventListener('click', function(e) {
+    if (e.target === this) closeJarNote();
+  });
+
+  // ══════════════════════════════════════════════
+  // SPARKLES on button click
+  // ══════════════════════════════════════════════
+  const SPARKLE_CHARS = ['✦','✧','·','*','🌸','✨','❤️','☀️'];
+
+  function spawnSparkles(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 8; i++) {
+      const el = document.createElement('span');
+      el.className = 'sparkle';
+      el.textContent = SPARKLE_CHARS[Math.floor(Math.random() * SPARKLE_CHARS.length)];
+
+      const angle = (Math.PI * 2 / 8) * i + (Math.random() - 0.5) * 0.6;
+      const dist1 = 40 + Math.random() * 40;
+      const dist2 = 70 + Math.random() * 50;
+      const tx  = Math.cos(angle) * dist1 + 'px';
+      const ty  = Math.sin(angle) * dist1 + 'px';
+      const tx2 = Math.cos(angle) * dist2 + 'px';
+      const ty2 = Math.sin(angle) * dist2 + 'px';
+      const tr  = (Math.random() * 90 - 45) + 'deg';
+      const tr2 = (Math.random() * 180 - 90) + 'deg';
+
+      el.style.cssText = `left:${cx}px;top:${cy}px;--tx:${tx};--ty:${ty};--tx2:${tx2};--ty2:${ty2};--tr:${tr};--tr2:${tr2};animation-delay:${i*0.04}s`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 800);
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // FLOATING HEART (DOM-based, lightweight)
+  // ══════════════════════════════════════════════
+  const HEART_EMOJIS = ['🌸','💗','✦','🌷','💕','✨','☀️','🧸'];
+
+  function spawnFloatingHeart() {
+    const container = document.getElementById('deco-hearts');
+    const el = document.createElement('span');
+    el.style.cssText = `
+      position: absolute;
+      font-size: ${14 + Math.random() * 18}px;
+      left: ${5 + Math.random() * 90}%;
+      bottom: -40px;
+      opacity: 0.85;
+      animation: floatHeart ${3.5 + Math.random() * 2.5}s ease-out forwards;
+      pointer-events: none;
+    `;
+    el.textContent = HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)];
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 6500);
+  }
+
+  // ══════════════════════════════════════════════
+  // CANVAS — soft ambient gradient orbs
+  // ══════════════════════════════════════════════
+  const canvas = document.getElementById('canvas');
+  const ctx    = canvas.getContext('2d');
+
+  const orbs = [
+    { x: 0.2, y: 0.15, r: 0.38, c: [252, 200, 220], speed: 0.00012, phase: 0   },
+    { x: 0.8, y: 0.7,  r: 0.32, c: [252, 220, 240], speed: 0.00009, phase: 2.1 },
+    { x: 0.5, y: 0.5,  r: 0.22, c: [255, 230, 240], speed: 0.00015, phase: 4.3 },
+  ];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function drawOrbs(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const W = canvas.width, H = canvas.height;
+
+    orbs.forEach(o => {
+      const ox = (o.x + Math.sin(t * o.speed + o.phase) * 0.08) * W;
+      const oy = (o.y + Math.cos(t * o.speed * 1.3 + o.phase) * 0.06) * H;
+      const radius = o.r * Math.min(W, H);
+
+      const grad = ctx.createRadialGradient(ox, oy, 0, ox, oy, radius);
+      grad.addColorStop(0,   `rgba(${o.c[0]},${o.c[1]},${o.c[2]},0.28)`);
+      grad.addColorStop(0.5, `rgba(${o.c[0]},${o.c[1]},${o.c[2]},0.10)`);
+      grad.addColorStop(1,   `rgba(${o.c[0]},${o.c[1]},${o.c[2]},0)`);
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(ox, oy, radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  let rafId;
+  function animate(t) {
+    drawOrbs(t);
+    rafId = requestAnimationFrame(animate);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  animate(0);
+
+  // ══════════════════════════════════════════════
+  // ДЕТЕКТОР ТРЯСКИ (SHAKE DETECTION) И СЕРДЕЧКИ
+  // ══════════════════════════════════════════════
+  let lastX = null, lastY = null, lastZ = null;
+  let lastTime = 0;
+  const SHAKE_THRESHOLD = 15; // Чувствительность тряски для телефонов
+  let isShaking = false;
+  let shakeTimeout = null;
+  let spawnInterval = null;
+
+  function handleMotionEvent(event) {
+    const acceleration = event.accelerationIncludingGravity;
+    if (!acceleration) return;
+
+    const now = Date.now();
+    if ((now - lastTime) > 80) {
+      const diffTime = now - lastTime;
+      lastTime = now;
+
+      const x = acceleration.x;
+      const y = acceleration.y;
+      const z = acceleration.z;
+
+      if (lastX !== null) {
+        // Вычисляем ускорение движения телефона
+        const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+        if (speed > SHAKE_THRESHOLD) {
+          startShaking();
+        }
+      }
+
+      lastX = x;
+      lastY = y;
+      lastZ = z;
+    }
+  }
+
+  function startShaking() {
+    if (!isShaking) {
+      isShaking = true;
+      if (!spawnInterval) {
+        spawnInterval = setInterval(() => {
+          spawnShakeHeart();
+        }, 80); // Генерируем сердечко каждые 80мс при тряске
+      }
+    }
+
+    // Если тряска прекратилась на 1 секунду, останавливаем генератор
+    clearTimeout(shakeTimeout);
+    shakeTimeout = setTimeout(() => {
+      stopShaking();
+    }, 1000);
+  }
+
+  function stopShaking() {
+    isShaking = false;
+    if (spawnInterval) {
+      clearInterval(spawnInterval);
+      spawnInterval = null;
+    }
+  }
+
+  function spawnShakeHeart() {
+    const container = document.getElementById('deco-hearts');
+    if (!container) return;
+
+    const el = document.createElement('span');
+    // Время жизни сердечка 10-15 секунд (оно будет лететь медленно и плавно)
+    const duration = 10 + Math.random() * 5; 
+    
+    el.style.cssText = `
+      position: absolute;
+      font-size: ${16 + Math.random() * 22}px;
+      left: ${5 + Math.random() * 90}%;
+      bottom: -40px;
+      opacity: 0.9;
+      animation: floatHeart ${duration}s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+      pointer-events: none;
+      z-index: 10;
+    `;
+    el.textContent = HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)];
+    container.appendChild(el);
+    
+    // Удаляем элемент после завершения его анимации
+    setTimeout(() => el.remove(), duration * 1000 + 500);
+  }
+
+  // Запрос разрешения на доступ к датчикам (актуально для iOS)
+  let permissionRequested = false;
+  function initShakeDetection() {
+    if (permissionRequested) return;
+    permissionRequested = true;
+
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            window.addEventListener('devicemotion', handleMotionEvent);
+          }
+        })
+        .catch(err => {
+          console.log("Ошибка доступа к акселерометру:", err);
+          permissionRequested = false; // Даем возможность повторить
+        });
+    } else {
+      // Для Android и ПК (если есть гироскоп)
+      window.addEventListener('devicemotion', handleMotionEvent);
+    }
+  }
+
+  // Инициализация датчиков при первом клике в любом месте страницы
+  document.addEventListener('click', () => {
+    initShakeDetection();
+  }, { once: true });
+
+  // СИМУЛЯТОР ДЛЯ ПК: быстрое движение мышкой или нажатие на клавишу 'S' / 'ы'
+  let lastMouseX = null, lastMouseY = null, lastMouseTime = null;
+  window.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (lastMouseX !== null && lastMouseTime !== null) {
+      const dt = now - lastMouseTime;
+      if (dt > 15) {
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const speed = dist / dt * 100; // скорость в пикселях в миллисекунду
+        if (speed > 180) { // если двинули очень быстро
+          startShaking();
+        }
+      }
+    }
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+    lastMouseTime = now;
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'ы') {
+      startShaking();
+    }
+  });
+
+  // ══════════════════════════════════════════════
+  // AUTO-SPAWN a few hearts on load
+  // ══════════════════════════════════════════════
+  setTimeout(() => spawnFloatingHeart(), 1200);
+  setTimeout(() => spawnFloatingHeart(), 2400);
+  setTimeout(() => spawnFloatingHeart(), 3800);
+</script>
+</body>
+</html>
