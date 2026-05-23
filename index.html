@@ -822,6 +822,655 @@
       animation: sparklePop 0.7s cubic-bezier(.16,1,.3,1) forwards;
     }
 
+    /* ── CUTE CAT SMILE GUARDIAN ── */
+    .cat-guardian {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 150;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      pointer-events: auto;
+      animation: catFloat 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes catFloat {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+
+    .cat-bubble {
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--graphite);
+      box-shadow: 0 4px 16px rgba(180, 100, 140, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: 180px;
+      text-align: right;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.9) translateY(10px);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+
+    .cat-bubble.show {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    .cat-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      right: 25px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 7px solid rgba(255,255,255,0.75);
+    }
+
+    .cat-container {
+      width: 56px;
+      height: 56px;
+      position: relative;
+    }
+
+    .cat-ears {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .ear-left, .ear-right {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 15px solid var(--rose-deep);
+      border-radius: 4px;
+    }
+    .ear-left { transform: rotate(-15deg); }
+    .ear-right { transform: rotate(15deg); }
+
+    .cat-head {
+      position: absolute;
+      top: 8px;
+      left: 3px;
+      width: 50px;
+      height: 40px;
+      background: #fae1e6;
+      border: 1.5px solid #f2a7bb;
+      border-radius: 50% 50% 45% 45%;
+      z-index: 2;
+    }
+
+    .cat-eyes {
+      position: absolute;
+      top: 14px;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 0 8px;
+    }
+
+    .eye-left, .eye-right {
+      width: 7px;
+      height: 7px;
+      background: var(--graphite);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .pupil {
+      width: 2px;
+      height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 1px;
+      left: 1px;
+    }
+
+    .cat-nose-mouth {
+      position: absolute;
+      top: 22px;
+      left: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cat-nose {
+      width: 4px;
+      height: 3px;
+      background: var(--rose-deep);
+      border-radius: 50%;
+    }
+
+    .cat-mouth {
+      width: 6px;
+      height: 3px;
+      border-bottom: 1.5px solid var(--graphite-mid);
+      border-radius: 0 0 5px 5px;
+    }
+
+    .cat-cheeks {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .cheek-left, .cheek-right {
+      width: 6px;
+      height: 4px;
+      background: rgba(242, 167, 187, 0.7);
+      border-radius: 50%;
+    }
+
+    .cat-body {
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      width: 36px;
+      height: 18px;
+      background: #fae1e6;
+      border: 1.5px solid #f2a7bb;
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      z-index: 1;
+    }
+
+    .cat-paws {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .paw-left, .paw-right {
+      width: 8px;
+      height: 5px;
+      background: #fff;
+      border: 1.2px solid #f2a7bb;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .cat-tail {
+      position: absolute;
+      bottom: 0;
+      left: -6px;
+      width: 18px;
+      height: 24px;
+      border: 3.5px solid #fae1e6;
+      border-left: none;
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      transform-origin: bottom right;
+      animation: catTailWag 2.5s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    @keyframes catTailWag {
+      0%   { transform: rotate(-5deg); }
+      100% { transform: rotate(15deg); }
+    }
+
+    .cat-guardian.wiggle {
+      animation: catWiggle 0.4s ease;
+    }
+
+    @keyframes catWiggle {
+      0%, 100% { transform: scale(1) rotate(0); }
+      25%  { transform: scale(1.1) rotate(-8deg); }
+      75%  { transform: scale(1.1) rotate(8deg); }
+    }
+
+    /* ── DAISY OF LOVE ── */
+    .daisy-card {
+      animation-delay: 0.28s;
+      text-align: center;
+    }
+
+    .daisy-instruction {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--graphite-mid);
+      margin-bottom: 15px;
+    }
+
+    .daisy-wrapper {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 20px auto;
+    }
+
+    .daisy-flower {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .daisy-center {
+      width: 44px;
+      height: 44px;
+      background: radial-gradient(circle, #ffd54f 0%, #ffb300 100%);
+      border: 1.5px solid #ffa000;
+      border-radius: 50%;
+      z-index: 5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(255, 179, 0, 0.4), inset 0 2px 5px rgba(255,255,255,0.4);
+      transition: all 0.2s ease;
+    }
+
+    .daisy-center span {
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #795548;
+      opacity: 0.8;
+      user-select: none;
+    }
+
+    .daisy-center:active {
+      transform: scale(0.92);
+      box-shadow: 0 2px 6px rgba(255, 179, 0, 0.3);
+    }
+
+    .daisy-petal {
+      position: absolute;
+      width: 28px;
+      height: 70px;
+      background: linear-gradient(to bottom, #ffffff 60%, #fae1e6 100%);
+      border: 1.2px solid rgba(212, 120, 154, 0.15);
+      border-radius: 50% 50% 40% 40%;
+      transform-origin: bottom center;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+      z-index: 4;
+      top: 20px;
+    }
+
+    .daisy-petal:hover {
+      transform: scale(1.06) rotate(var(--rot)) !important;
+      box-shadow: 0 5px 12px rgba(212, 120, 154, 0.15);
+    }
+
+    .petal-0 { --rot: 0deg; transform: rotate(0deg); }
+    .petal-1 { --rot: 51.4deg; transform: rotate(51.4deg); }
+    .petal-2 { --rot: 102.8deg; transform: rotate(102.8deg); }
+    .petal-3 { --rot: 154.2deg; transform: rotate(154.2deg); }
+    .petal-4 { --rot: 205.6deg; transform: rotate(205.6deg); }
+    .petal-5 { --rot: 257deg; transform: rotate(257deg); }
+    .petal-6 { --rot: 308.4deg; transform: rotate(308.4deg); }
+
+    .daisy-petal.plucked {
+      animation: petalFall 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      pointer-events: none;
+    }
+
+    @keyframes petalFall {
+      0% {
+        transform: rotate(var(--rot)) translateY(0) rotate(0);
+        opacity: 1;
+      }
+      20% {
+        transform: rotate(var(--rot)) translateY(8px) rotate(15deg);
+        opacity: 0.95;
+      }
+      100% {
+        transform: translateY(300px) translateX(var(--drift, 40px)) rotate(var(--spin, 120deg));
+        opacity: 0;
+      }
+    }
+
+    .daisy-message-box {
+      margin-top: 15px;
+      min-height: 54px;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(212, 120, 154, 0.2);
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .daisy-msg-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--graphite);
+      line-height: 1.45;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .daisy-msg-text.fade-out {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    /* ── MAGIC CONSTELLATION ── */
+    .constellation-card {
+      background: linear-gradient(135deg, #18131d 0%, #2c2038 100%) !important;
+      border: 1.5px solid rgba(255,255,255,0.15) !important;
+      box-shadow: 0 10px 40px rgba(44, 32, 56, 0.4) !important;
+      animation-delay: 0.33s;
+      text-align: center;
+    }
+
+    .constellation-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+    }
+
+    .constellation-wrapper {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      margin: 10px auto 20px;
+      background: radial-gradient(circle, rgba(212,120,154,0.1) 0%, transparent 80%);
+      border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,0.1);
+      overflow: visible;
+    }
+
+    .constellation-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .constellation-svg line {
+      stroke: var(--rose);
+      stroke-width: 2.5px;
+      stroke-linecap: round;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: drawLine 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      filter: drop-shadow(0 0 6px rgba(242,167,187,0.8));
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .star-node {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--graphite);
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 0 10px #fff, 0 0 20px var(--rose);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .star-node.active {
+      background: var(--rose);
+      color: #fff;
+      box-shadow: 0 0 16px var(--rose), 0 0 32px var(--rose-deep);
+      transform: scale(1.15);
+    }
+
+    .star-pulse {
+      position: absolute;
+      inset: -6px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      animation: starPulse 2s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes starPulse {
+      0%   { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    .star-1 { left: 45%; top: 15%; }
+    .star-2 { left: 15%; top: 32%; }
+    .star-3 { left: 24%; top: 68%; }
+    .star-4 { left: 45%; top: 85%; }
+    .star-5 { left: 66%; top: 68%; }
+    .star-6 { left: 75%; top: 32%; }
+
+    .constellation-msg {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 14px 18px;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+    }
+
+    .constellation-msg.unlocked {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--rose);
+      box-shadow: 0 8px 30px rgba(242, 167, 187, 0.3);
+    }
+
+    .constellation-lock {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.05em;
+    }
+
+    .constellation-text-wrap {
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .constellation-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--rose-deep);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .constellation-text-wrap p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--graphite);
+    }
+
+    /* ── ROMANTIC COUPONS ── */
+    .coupons-card {
+      animation-delay: 0.42s;
+    }
+
+    .coupons-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--graphite-mid);
+      margin-bottom: 15px;
+    }
+
+    .gift-box-wrapper {
+      margin: 20px auto 10px;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .gift-box-wrapper:hover {
+      transform: scale(1.08) rotate(-2deg);
+    }
+
+    .gift-box-wrapper:active {
+      transform: scale(0.96);
+    }
+
+    .gift-box-body {
+      width: 100px;
+      height: 100px;
+      position: relative;
+    }
+
+    .gift-box-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .gift-box-wrapper:hover .gift-lid {
+      transform: translateY(-4px);
+      transition: transform 0.2s ease;
+    }
+
+    .gift-hint {
+      margin-top: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--rose-deep);
+      opacity: 0.9;
+    }
+
+    .coupons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .coupon-item {
+      background: linear-gradient(135deg, var(--rose-light) 0%, #fff 100%);
+      border: 1.5px dashed var(--rose);
+      border-radius: 16px;
+      padding: 16px 20px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(212,120,154,0.1);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .coupon-item::before, .coupon-item::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      background: var(--cream);
+      border: 1.5px solid var(--rose);
+      border-radius: 50%;
+    }
+
+    .coupon-item::before { left: -9px; transform: translateY(-50%) rotate(45deg); }
+    .coupon-item::after { right: -9px; transform: translateY(-50%) rotate(-135deg); }
+
+    .coupon-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,120,154,0.22);
+      border-style: solid;
+    }
+
+    .coupon-header {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+    }
+
+    .coupon-content h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(17px, 4.8vw, 21px);
+      font-weight: 400;
+      color: var(--graphite);
+      margin-bottom: 4px;
+    }
+
+    .coupon-content p {
+      font-size: 11px;
+      color: var(--graphite-mid);
+      line-height: 1.4;
+    }
+
+    .coupon-footer {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rose-deep);
+      align-self: flex-end;
+      border-bottom: 1.2px solid transparent;
+      transition: border 0.2s;
+    }
+
+    .coupon-item:hover .coupon-footer {
+      border-color: var(--rose-deep);
+    }
+
+    .coupon-item.activated {
+      background: linear-gradient(135deg, rgba(212,120,154,0.15) 0%, rgba(212,120,154,0.05) 100%);
+      border-style: solid;
+      border-color: var(--rose-deep);
+      pointer-events: none;
+      filter: grayscale(0.2) opacity(0.85);
+    }
+
+    .coupon-item.activated .coupon-footer {
+      color: var(--graphite-mid);
+      border-color: transparent !important;
+    }
+
     @keyframes sparklePop {
       0%   { transform: translate(-50%,-50%) scale(0) rotate(0deg); opacity: 1; }
       80%  { transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(var(--tr)); opacity: 1; }
@@ -833,6 +1482,38 @@
 
 <canvas id="canvas"></canvas>
 <div class="deco-hearts" id="deco-hearts"></div>
+
+<!-- CUTE CAT SMILE GUARDIAN -->
+<div class="cat-guardian" id="cat-guardian" onclick="meowCat(event)">
+  <div class="cat-bubble" id="cat-bubble">Привет, Софи! 🌸</div>
+  <div class="cat-container">
+    <div class="cat-ears">
+      <div class="ear-left"></div>
+      <div class="ear-right"></div>
+    </div>
+    <div class="cat-head">
+      <div class="cat-eyes">
+        <div class="eye-left"><div class="pupil"></div></div>
+        <div class="eye-right"><div class="pupil"></div></div>
+      </div>
+      <div class="cat-nose-mouth">
+        <div class="cat-nose"></div>
+        <div class="cat-mouth"></div>
+      </div>
+      <div class="cat-cheeks">
+        <div class="cheek-left"></div>
+        <div class="cheek-right"></div>
+      </div>
+    </div>
+    <div class="cat-body">
+      <div class="cat-paws">
+        <div class="paw-left"></div>
+        <div class="paw-right"></div>
+      </div>
+    </div>
+    <div class="cat-tail" id="cat-tail"></div>
+  </div>
+</div>
 
 
 
@@ -914,6 +1595,32 @@
     </div>
   </div>
 
+  <!-- DAISY CARD -->
+  <div class="glass-card daisy-card" id="daisy-section">
+    <p class="card-label">✦ Ромашка Любви</p>
+    <div class="divider"></div>
+    <p class="daisy-instruction">Оторви лепестки по одному, чтобы кое-что узнать... 🌼</p>
+    
+    <div class="daisy-wrapper">
+      <div class="daisy-flower">
+        <div class="daisy-center" onclick="clickDaisyCenter(event)">
+          <span>click!</span>
+        </div>
+        <div class="daisy-petal petal-0" onclick="pluckPetal(this, 0, event)"></div>
+        <div class="daisy-petal petal-1" onclick="pluckPetal(this, 1, event)"></div>
+        <div class="daisy-petal petal-2" onclick="pluckPetal(this, 2, event)"></div>
+        <div class="daisy-petal petal-3" onclick="pluckPetal(this, 3, event)"></div>
+        <div class="daisy-petal petal-4" onclick="pluckPetal(this, 4, event)"></div>
+        <div class="daisy-petal petal-5" onclick="pluckPetal(this, 5, event)"></div>
+        <div class="daisy-petal petal-6" onclick="pluckPetal(this, 6, event)"></div>
+      </div>
+    </div>
+
+    <div class="daisy-message-box" id="daisy-msg-box">
+      <span class="daisy-msg-text" id="daisy-msg-text">Выбери лепесток 🌼</span>
+    </div>
+  </div>
+
   <div class="glass-card counter-card">
     <p class="card-label"><span class="live-dot"></span>Мы вместе уже</p>
     <div class="divider"></div>
@@ -932,6 +1639,32 @@
       </div>
     </div>
     <p class="counter-since" id="counter-since">с самого первого дня ✦</p>
+  </div>
+
+  <!-- CONSTELLATION CARD -->
+  <div class="glass-card constellation-card" id="constellation-section">
+    <p class="card-label" style="color: #fce4ec;">✦ Звёздное небо Софи</p>
+    <div class="divider" style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);"></div>
+    <p class="constellation-sub">Соедини все звёзды в порядке их свечения... 🌌</p>
+    
+    <div class="constellation-wrapper">
+      <svg class="constellation-svg" id="constellation-svg">
+      </svg>
+      <div class="star-node star-1" id="star-1" onclick="connectStar(1)">1<div class="star-pulse"></div></div>
+      <div class="star-node star-2" id="star-2" onclick="connectStar(2)">2<div class="star-pulse"></div></div>
+      <div class="star-node star-3" id="star-3" onclick="connectStar(3)">3<div class="star-pulse"></div></div>
+      <div class="star-node star-4" id="star-4" onclick="connectStar(4)">4<div class="star-pulse"></div></div>
+      <div class="star-node star-5" id="star-5" onclick="connectStar(5)">5<div class="star-pulse"></div></div>
+      <div class="star-node star-6" id="star-6" onclick="connectStar(6)">6<div class="star-pulse"></div></div>
+    </div>
+
+    <div class="constellation-msg" id="constellation-msg">
+      <span class="constellation-lock">🔒 Рисунок не завершен...</span>
+      <div class="constellation-text-wrap" id="constellation-text-wrap" style="display: none;">
+        <span class="constellation-header">Путеводная звезда 🌟</span>
+        <p>Софи, ты моя самая яркая путеводная звезда... В каком бы направлении я ни шел, моё сердце всегда ведет меня прямо к тебе. Люблю тебя безумно! 🤍🪐</p>
+      </div>
+    </div>
   </div>
 
   <!-- LOVE JAR CARD -->
@@ -955,6 +1688,62 @@
         </div>
       </div>
       <p class="jar-hint">Нажми на баночку, чтобы достать записку 🧸🫙</p>
+    </div>
+  </div>
+
+  <!-- COUPONS CARD -->
+  <div class="glass-card coupons-card" id="coupons-section">
+    <p class="card-label">✦ Романтические купоны</p>
+    <div class="divider"></div>
+    <p class="coupons-sub">Нажми на коробочку, чтобы открыть книгу купонов! 🎁</p>
+
+    <div class="gift-box-wrapper" id="gift-box-wrapper" onclick="unlockCoupons(event)">
+      <div class="gift-box-body">
+        <svg viewBox="0 0 100 100" class="gift-box-svg">
+          <path class="gift-lid" d="M15 32 H85 V42 H15 Z" fill="#d4789a" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.15))"/>
+          <path d="M20 42 H80 V85 C80 88 78 90 75 90 H25 C22 90 20 88 20 85 Z" fill="#f2a7bb"/>
+          <path d="M45 32 H55 V90 H45 Z" fill="#ffffff" opacity="0.9"/>
+          <path d="M15 35 H85 V39 H15 Z" fill="#ffffff" opacity="0.9"/>
+          <path d="M50 32 C38 18, 30 32, 50 32 Z" fill="#ffffff" opacity="0.9"/>
+          <path d="M50 32 C62 18, 70 32, 50 32 Z" fill="#ffffff" opacity="0.9"/>
+        </svg>
+      </div>
+      <p class="gift-hint">открыть сюрприз ✨</p>
+    </div>
+
+    <div class="coupons-list" id="coupons-list" style="display: none;">
+      <div class="coupon-item" onclick="activateCoupon(this, '1000 крепких объятий 🫂')">
+        <div class="coupon-header">КУПОН</div>
+        <div class="coupon-content">
+          <h3>1000 крепких объятий 🫂</h3>
+          <p>Действует в любое время, лечит любую грусть и усталость.</p>
+        </div>
+        <div class="coupon-footer">активировать</div>
+      </div>
+      <div class="coupon-item" onclick="activateCoupon(this, 'Массаж спинки или плеч 💆‍♀️')">
+        <div class="coupon-header">КУПОН</div>
+        <div class="coupon-content">
+          <h3>Массаж спинки или плеч 💆‍♀️</h3>
+          <p>Идеально после долгого учебного или рабочего дня.</p>
+        </div>
+        <div class="coupon-footer">активировать</div>
+      </div>
+      <div class="coupon-item" onclick="activateCoupon(this, 'Романтический ужин от меня 🕯️')">
+        <div class="coupon-header">КУПОН</div>
+        <div class="coupon-content">
+          <h3>Романтический ужин 🕯️</h3>
+          <p>Я приготовлю твоё любимое блюдо и устрою атмосферу.</p>
+        </div>
+        <div class="coupon-footer">активировать</div>
+      </div>
+      <div class="coupon-item" onclick="activateCoupon(this, 'Исполнение каприза ✨')">
+        <div class="coupon-header">КУПОН</div>
+        <div class="coupon-content">
+          <h3>Исполнение каприза ✨</h3>
+          <p>Предъяви его мне — и я сделаю то, что ты попросишь.</p>
+        </div>
+        <div class="coupon-footer">активировать</div>
+      </div>
     </div>
   </div>
 
@@ -1004,7 +1793,305 @@
   ];
 
   // ══════════════════════════════════════════════
-  // COUNTER
+  // КОТИК — ХРАНИТЕЛЬ УЛЫБКИ (CUTE CAT GUARDIAN)
+  // ══════════════════════════════════════════════
+  const CAT_PHRASES = [
+    "Мяу! Софи, ты самая очаровательная принцесса во вселенной! 👑🐾",
+    "Ты моё вдохновение и моя нежность! Муррр... 🥰",
+    "Твоя улыбка согревает меня даже сквозь любые расстояния! 🌸",
+    "Мур! Давай сделаем перерыв на обнимашки? 🫂🤍",
+    "Софи, ты делаешь мою жизнь невероятно яркой и счастливой! ✨🐾",
+    "Помни: я всегда-всегда на твоей стороне! 🛡️🧸💞",
+    "Мяу! Твои глазки — самые красивые во всем мире! 👀💝",
+    "Ты моё самое любимое чудо на всей планете! Мур! 🪐✨"
+  ];
+
+  let lastCatIdx = -1;
+  let bubbleTimeout = null;
+
+  function meowCat(e) {
+    const cat = document.getElementById('cat-guardian');
+    const bubble = document.getElementById('cat-bubble');
+    if (!cat || !bubble) return;
+
+    // Запускаем анимацию шевеления котика
+    cat.classList.add('wiggle');
+    setTimeout(() => cat.classList.remove('wiggle'), 400);
+
+    // Взрыв искорок и сердечко
+    spawnSparkles(e);
+    spawnFloatingHeart();
+
+    // Выбираем случайную милую фразу
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * CAT_PHRASES.length);
+    } while (idx === lastCatIdx && CAT_PHRASES.length > 1);
+    lastCatIdx = idx;
+
+    // Показываем фразу в облачке текста
+    bubble.textContent = CAT_PHRASES[idx];
+    bubble.classList.add('show');
+
+    // Скрываем облачко обратно через 4 секунды молчания
+    clearTimeout(bubbleTimeout);
+    bubbleTimeout = setTimeout(() => {
+      bubble.classList.remove('show');
+    }, 4500);
+  }
+
+  function updateCatGreeting() {
+    const hours = new Date().getHours();
+    let greeting = "Привет, Софи! 🌸";
+
+    if (hours >= 5 && hours < 12) {
+      greeting = "Доброе утро, Софи! Пусть этот день принесёт тебе много улыбок! ☀️🐱";
+    } else if (hours >= 12 && hours < 18) {
+      greeting = "Привет, моя хорошая! Не забывай делать паузы и улыбаться! Ты лучшая! 🌸🐾";
+    } else {
+      greeting = "Сладких снов, моя любимая Софи... Пусть тебе приснятся самые нежные сны! 🌙✨";
+    }
+
+    const bubble = document.getElementById('cat-bubble');
+    if (bubble) {
+      bubble.textContent = greeting;
+      // Мягко показываем приветствие через 2.5 секунды после загрузки
+      setTimeout(() => {
+        bubble.classList.add('show');
+        bubbleTimeout = setTimeout(() => {
+          bubble.classList.remove('show');
+        }, 5000);
+      }, 2500);
+    }
+  }
+
+  // Запуск приветствия котика
+  updateCatGreeting();
+
+  // ══════════════════════════════════════════════
+  // РОМАШКА ЛЮБВИ (DAISY OF LOVE)
+  // ══════════════════════════════════════════════
+  const DAISY_REASONS = [
+    "Твоя улыбка освещает абсолютно всё вокруг ☀️",
+    "У тебя самое тёплое, доброе и любящее сердце 🤍",
+    "Твои объятия дарят мне бесконечный покой 🫂",
+    "Обожаю твой звонкий, безумно счастливый смех 🌸",
+    "Ты невероятно умная, целеустремленная и сильная 💪",
+    "С тобой я чувствую себя самым счастливым человеком 🥰",
+    "Каждая проведённая секунда рядом с тобой — это чудо 💫"
+  ];
+
+  let pluckedCount = 0;
+
+  function pluckPetal(petalEl, idx, e) {
+    if (petalEl.classList.contains('plucked')) return;
+
+    // Взрыв искорок
+    spawnSparkles(e);
+
+    // Добавляем случайное вращение и снос для реалистичного опадания лепестка
+    const drift = (Math.random() * 100 - 50) + 'px';
+    const spin = (Math.random() * 180 - 90) + 'deg';
+    petalEl.style.setProperty('--drift', drift);
+    petalEl.style.setProperty('--spin', spin);
+    
+    // Запускаем анимацию опадания
+    petalEl.classList.add('plucked');
+    pluckedCount++;
+
+    // Показываем текст признания с эффектом затухания
+    const msgText = document.getElementById('daisy-msg-text');
+    if (msgText) {
+      msgText.classList.add('fade-out');
+      setTimeout(() => {
+        msgText.textContent = DAISY_REASONS[idx];
+        msgText.classList.remove('fade-out');
+      }, 250);
+    }
+
+    // Если оторвали все 7 лепестков
+    if (pluckedCount === 7) {
+      setTimeout(() => {
+        const inst = document.querySelector('.daisy-instruction');
+        if (inst) inst.textContent = "А теперь нажми на желтый центр ромашки! 🌼";
+        if (msgText) {
+          msgText.classList.add('fade-out');
+          setTimeout(() => {
+            msgText.textContent = "Нажми в самый центр... ✨";
+            msgText.classList.remove('fade-out');
+          }, 250);
+        }
+      }, 1000);
+    }
+  }
+
+  function clickDaisyCenter(e) {
+    const center = document.querySelector('.daisy-center');
+    const msgText = document.getElementById('daisy-msg-text');
+
+    if (pluckedCount < 7) {
+      // Если оторваны не все лепестки — покачиваем сердцевинку
+      center.classList.add('wiggle');
+      setTimeout(() => center.classList.remove('wiggle'), 400);
+      
+      if (msgText) {
+        msgText.classList.add('fade-out');
+        setTimeout(() => {
+          msgText.textContent = "Сначала оторви все лепестки! 🌼";
+          msgText.classList.remove('fade-out');
+        }, 250);
+      }
+    } else {
+      // Если все лепестки оторваны — фееричный взрыв чувств!
+      spawnSparkles(e);
+      
+      // Запускаем массивный фейерверк сердечек
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => spawnFloatingHeart(), i * 150);
+      }
+
+      if (msgText) {
+        msgText.classList.add('fade-out');
+        setTimeout(() => {
+          msgText.innerHTML = "<strong>Я БЕЗУМНО ТЕБЯ ЛЮБЛЮ, СОФИ! 💖🌸✨</strong>";
+          msgText.classList.remove('fade-out');
+        }, 250);
+      }
+
+      const inst = document.querySelector('.daisy-instruction');
+      if (inst) inst.innerHTML = "Ты — моя вечность! 🥰💞";
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // СОЗВЕЗДИЕ СОФИ (MAGIC CONSTELLATION)
+  // ══════════════════════════════════════════════
+  const starSequence = [1, 2, 3, 4, 5, 6, 1];
+  let nextStarIndex = 0;
+
+  function connectStar(starId) {
+    const expected = starSequence[nextStarIndex];
+    const starEl = document.getElementById('star-' + starId);
+
+    if (starId !== expected) {
+      // Если нажали не по порядку — звезда покачивается
+      if (starEl) {
+        starEl.classList.add('wiggle');
+        setTimeout(() => starEl.classList.remove('wiggle'), 400);
+      }
+      return;
+    }
+
+    // Успешный клик
+    starEl.classList.add('active');
+    
+    // Рисуем неоновую линию от предыдущей звезды
+    if (nextStarIndex > 0) {
+      const prevId = starSequence[nextStarIndex - 1];
+      drawConstellationLine(prevId, starId);
+    }
+
+    nextStarIndex++;
+
+    // Если соединили все звезды до конца
+    if (nextStarIndex === starSequence.length - 1) {
+      // Соединяем последнюю (6) обратно с первой (1), закрывая сердце
+      drawConstellationLine(6, 1);
+      setTimeout(unlockConstellation, 800);
+    }
+  }
+
+  function drawConstellationLine(fromId, toId) {
+    const svg = document.getElementById('constellation-svg');
+    const fromStar = document.getElementById('star-' + fromId);
+    const toStar = document.getElementById('star-' + toId);
+    if (!svg || !fromStar || !toStar) return;
+
+    const svgRect = svg.getBoundingClientRect();
+    const fromRect = fromStar.getBoundingClientRect();
+    const toRect = toStar.getBoundingClientRect();
+
+    const x1 = fromRect.left - svgRect.left + fromRect.width / 2;
+    const y1 = fromRect.top - svgRect.top + fromRect.height / 2;
+    const x2 = toRect.left - svgRect.left + toRect.width / 2;
+    const y2 = toRect.top - svgRect.top + toRect.height / 2;
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    
+    svg.appendChild(line);
+  }
+
+  function unlockConstellation() {
+    // Взрыв радости
+    for (let i = 0; i < 8; i++) {
+      setTimeout(() => spawnFloatingHeart(), i * 120);
+    }
+
+    const msgBox = document.getElementById('constellation-msg');
+    const lockEl = document.querySelector('.constellation-lock');
+    const textEl = document.getElementById('constellation-text-wrap');
+
+    if (msgBox && lockEl && textEl) {
+      msgBox.classList.add('unlocked');
+      lockEl.style.display = 'none';
+      textEl.style.display = 'block';
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // РОМАНТИЧЕСКИЕ КУПОНЫ (ROMANTIC COUPONS)
+  // ══════════════════════════════════════════════
+  function unlockCoupons(e) {
+    spawnSparkles(e);
+    
+    const wrapper = document.getElementById('gift-box-wrapper');
+    const list = document.getElementById('coupons-list');
+    if (!wrapper || !list) return;
+
+    // Запускаем красивый эффект «открытия»
+    wrapper.style.transform = 'scale(0.2) rotate(45deg)';
+    wrapper.style.opacity = '0';
+    
+    setTimeout(() => {
+      wrapper.style.display = 'none';
+      list.style.display = 'flex';
+    }, 450);
+  }
+
+  function activateCoupon(el, title) {
+    if (el.classList.contains('activated')) return;
+
+    // Генерируем взрыв искорок точно в центре купона
+    const rect = el.getBoundingClientRect();
+    const eMock = {
+      currentTarget: el,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2
+    };
+    spawnSparkles(eMock);
+    spawnFloatingHeart();
+
+    // Маркируем купон как активированный
+    el.classList.add('activated');
+    const footer = el.querySelector('.coupon-footer');
+    if (footer) footer.textContent = "активирован 💖";
+
+    // Показываем красивое диалоговое подтверждение
+    document.getElementById('popup-emoji').textContent = "🎟️";
+    document.getElementById('popup-msg').innerHTML = 
+      `Купон <strong>«${title}»</strong> успешно активирован Софи! 💖<br><br>Предъяви его мне в реальной жизни в любой момент!`;
+    
+    const popup = document.getElementById('popup');
+    if (popup) {
+      popup.classList.add('show');
+      document.getElementById('popup-overlay').style.pointerEvents = 'auto';
+    }
+  }
+
   // ══════════════════════════════════════════════
   const dayEl   = document.getElementById('cnt-days');
   const hourEl  = document.getElementById('cnt-hours');
